@@ -9,6 +9,8 @@ import tech.jotave.demoparkapi.entity.User;
 
 import tech.jotave.demoparkapi.service.UserService;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/users")
@@ -22,9 +24,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
+    @GetMapping
+    public ResponseEntity<List<User>> getAll() {
+        List<User> usersResponse = userService.getAll();
+        return ResponseEntity.ok(usersResponse);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         User userResponse = userService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody User user) {
+        User userResponse = userService.updatePassword(id, user.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 

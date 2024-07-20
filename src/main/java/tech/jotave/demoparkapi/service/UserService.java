@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jotave.demoparkapi.entity.User;
 import tech.jotave.demoparkapi.repository.UserRepository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -19,9 +21,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("User not found.")
         );
+    }
+
+    @Transactional
+    public User updatePassword(Long id, String password) {
+        User user = getById(id);
+        user.setPassword(password);
+        return user;
     }
 }
