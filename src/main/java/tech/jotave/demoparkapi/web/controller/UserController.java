@@ -1,5 +1,6 @@
 package tech.jotave.demoparkapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,9 @@ public class UserController {
 
     // entity encapsula a resposta
     @PostMapping
-    public ResponseEntity<UserResponseDto> create(@RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserCreateDto userCreateDto) {
         User userResponse = userService.save(UserMapper.toUser(userCreateDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(userResponse));
+        return ResponseEntity.status(HttpStatus.CREATED).bo dy(UserMapper.toDto(userResponse));
     }
 
     @GetMapping
