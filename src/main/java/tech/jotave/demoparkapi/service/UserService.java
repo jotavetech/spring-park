@@ -33,9 +33,23 @@ public class UserService {
     }
 
     @Transactional
-    public User updatePassword(Long id, String password) {
+    public User updatePassword(
+            Long id,
+            String oldPassword,
+            String newPassword,
+            String confirmNewPassword
+    ) {
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new RuntimeException("The confirm password must be the same");
+        }
+
         User user = getById(id);
-        user.setPassword(password);
+
+        if (!user.getPassword().equals(oldPassword)) {
+            throw new RuntimeException("Old password is wrong");
+        }
+
+        user.setPassword(newPassword);
         return user;
     }
 }

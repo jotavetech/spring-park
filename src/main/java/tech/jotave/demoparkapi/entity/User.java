@@ -29,7 +29,7 @@ public class User implements Serializable {
     // transforma o nome da const em uma string no bd
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 25)
-    private Role role;
+    private Role role = Role.ROLE_CLIENT;
 
     private LocalDateTime createdAt;
 
