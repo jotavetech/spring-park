@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tech.jotave.demoparkapi.exception.EntityNotFoundException;
 import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
+import tech.jotave.demoparkapi.exception.PasswordInvalidException;
 
 @Slf4j
 @RestControllerAdvice
@@ -58,5 +59,18 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> passwordInvalidException(
+            PasswordInvalidException exception,
+            HttpServletRequest request
+
+    ) {
+        log.error("Api error - ", exception);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jotave.demoparkapi.entity.User;
 import tech.jotave.demoparkapi.exception.EntityNotFoundException;
 import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
+import tech.jotave.demoparkapi.exception.PasswordInvalidException;
 import tech.jotave.demoparkapi.repository.UserRepository;
 
 import java.util.List;
@@ -46,13 +47,13 @@ public class UserService {
             String confirmNewPassword
     ) {
         if (!newPassword.equals(confirmNewPassword)) {
-            throw new RuntimeException("The confirm password must be the same");
+            throw new PasswordInvalidException("The confirm password must be the same");
         }
 
         User user = getById(id);
 
         if (!user.getPassword().equals(oldPassword)) {
-            throw new RuntimeException("Old password is wrong");
+            throw new PasswordInvalidException("Old password is wrong");
         }
 
         user.setPassword(newPassword);
