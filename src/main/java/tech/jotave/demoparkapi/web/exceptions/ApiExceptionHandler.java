@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tech.jotave.demoparkapi.exception.EntityNotFoundException;
 import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(UsernameUniqueViolationException.class)
-    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(
+    public ResponseEntity<ErrorMessage> uniqueViolationException(
             UsernameUniqueViolationException exception,
             HttpServletRequest request
 
@@ -44,5 +45,18 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> entityNotFoundException(
+            EntityNotFoundException exception,
+            HttpServletRequest request
+
+    ) {
+        log.error("Api error - ", exception);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 }

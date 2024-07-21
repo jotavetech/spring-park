@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jotave.demoparkapi.entity.User;
+import tech.jotave.demoparkapi.exception.EntityNotFoundException;
 import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
 import tech.jotave.demoparkapi.repository.UserRepository;
 
@@ -33,7 +34,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User not found.")
+                () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado", id))
         );
     }
 
