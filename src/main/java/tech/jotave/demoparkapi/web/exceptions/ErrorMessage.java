@@ -1,5 +1,6 @@
 package tech.jotave.demoparkapi.web.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.ToString;
@@ -18,16 +19,19 @@ public class ErrorMessage {
     private int status;
     private String statusText;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
 
-    public ErrorMessage() {
+    public ErrorMessage(HttpServletRequest request, HttpStatus status, String message) {
+        this.path = request.getRequestURI();
+        this.method = request.getMethod();
+        this.status = status.value();
+        this.statusText = status.getReasonPhrase();
+        this.message = message;
     }
 
     public ErrorMessage(
-            HttpServletRequest request,
-            HttpStatus status,
-            String message,
-            BindingResult result
+            HttpServletRequest request, HttpStatus status, String message, BindingResult result
     ) {
         this.path = request.getRequestURI();
         this.method = request.getMethod();

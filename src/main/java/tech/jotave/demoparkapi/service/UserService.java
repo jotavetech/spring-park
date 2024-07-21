@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jotave.demoparkapi.entity.User;
+import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
 import tech.jotave.demoparkapi.repository.UserRepository;
 
 import java.util.List;
@@ -17,7 +18,11 @@ public class UserService {
     // spring toma conta de abrir, gerenciar e fechar a transação do método.
     @Transactional
     public User save(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsernameUniqueViolationException(String.format("Email %s já cadastrado", user.getUsername()));
+        }
     }
 
     @Transactional(readOnly = true)

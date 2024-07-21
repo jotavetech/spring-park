@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tech.jotave.demoparkapi.exception.UsernameUniqueViolationException;
 
 @Slf4j
 @RestControllerAdvice
@@ -30,5 +31,18 @@ public class ApiExceptionHandler {
                         "Campo(s) inválido(s).",
                         result
                 ));
+    }
+
+    @ExceptionHandler(UsernameUniqueViolationException.class)
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(
+            UsernameUniqueViolationException exception,
+            HttpServletRequest request
+
+    ) {
+        log.error("Api error - ", exception);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, exception.getMessage()));
     }
 }
