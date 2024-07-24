@@ -40,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public User updatePassword(
+    public void updatePassword(
             Long id,
             String oldPassword,
             String newPassword,
@@ -57,6 +57,5 @@ public class UserService {
         }
 
         user.setPassword(newPassword);
-        return user;
     }
 }
